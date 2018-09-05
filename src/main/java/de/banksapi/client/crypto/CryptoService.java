@@ -4,8 +4,13 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringBufferInputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
@@ -67,6 +72,21 @@ public class CryptoService {
             X509Certificate cer = (X509Certificate) fact.generateCertificate(fis);
             cryptoService.publicKey = cer.getPublicKey();
         }
+
+        return cryptoService;
+    }
+    
+    public static CryptoService fromX509PEMsRaw(String pemPublicKeyRaw)
+            throws CertificateException {
+        CryptoService cryptoService = new CryptoService();
+
+        ByteArrayInputStream rawIs =
+            new ByteArrayInputStream(pemPublicKeyRaw.getBytes(StandardCharsets.US_ASCII));
+        
+        CertificateFactory fact = CertificateFactory.getInstance("X.509");
+        X509Certificate cer = (X509Certificate) fact.generateCertificate(
+            rawIs);
+        cryptoService.publicKey = cer.getPublicKey();
 
         return cryptoService;
     }
