@@ -70,14 +70,8 @@ public class Bankzugang implements Relations {
     public Collection<Message> getMessages() {
         return messages;
     }
-    
-    
+
     public boolean isSync() {
         return sync;
     }
-    
-    public void setSync(boolean sync) {
-        this.sync = sync;
-    }
-    
 }
