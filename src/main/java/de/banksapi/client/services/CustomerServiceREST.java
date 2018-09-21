@@ -55,6 +55,12 @@ public class CustomerServiceREST extends CustomerServiceBase {
         return createAuthenticatingHttpClient(bankzugaengeUrl).get(BankzugangMap.class);
     }
 
+    public Response<BankzugangMap> getBankzugaengeTentative() {
+        String path = "bankzugaenge?tentative=true";
+        URL bankzugaengeUrl = buildUrl(CUSTOMER_CONTEXT, path);
+        return createAuthenticatingHttpClient(bankzugaengeUrl).get(BankzugangMap.class);
+    }
+    
     public Response<String> addBankzugaenge(LoginCredentialsMap loginCredentialsMap) {
         URL bankzugaengeUrl = buildUrl(CUSTOMER_CONTEXT, PATH_FMT_BANKZUGAENGE);
 
@@ -67,6 +73,21 @@ public class CustomerServiceREST extends CustomerServiceBase {
                 .post(loginCredentialsMapToUse, String.class);
     }
 
+    /**
+     * Aktualisierung von Bankzugängen, selbst wenn schon vorhanden
+     */
+    public Response<String> addBankzugaengeRefresh(LoginCredentialsMap loginCredentialsMap) {
+        URL bankzugaengeUrl = buildUrl(CUSTOMER_CONTEXT, "bankzugaenge?refresh=true");
+
+        LoginCredentialsMap loginCredentialsMapToUse = loginCredentialsMap;
+        if (cryptoService != null) {
+            loginCredentialsMapToUse = encryptLoginCredentialsMap(loginCredentialsMap);
+        }
+
+        return createAuthenticatingHttpClient(bankzugaengeUrl)
+                .post(loginCredentialsMapToUse, String.class);
+    }
+    
     public Response<String> deleteBankzugaenge() {
         URL bankzugaengeUrl = buildUrl(CUSTOMER_CONTEXT, PATH_FMT_BANKZUGAENGE);
         return createAuthenticatingHttpClient(bankzugaengeUrl).delete();
@@ -79,6 +100,13 @@ public class CustomerServiceREST extends CustomerServiceBase {
 
     public Response<Bankzugang> getBankzugang(String accountId) {
         URL bankzugaengeUrl = buildUrl(CUSTOMER_CONTEXT, PATH_FMT_BANKZUGANG, accountId);
+        return createAuthenticatingHttpClient(bankzugaengeUrl).get(Bankzugang.class);
+    }
+    
+    // FIXME
+    public Response<Bankzugang> getBankzugangTentative(String accountId) {
+        String path = "bankzugaenge/%s?tentative=true";
+        URL bankzugaengeUrl = buildUrl(CUSTOMER_CONTEXT, path, accountId);
         return createAuthenticatingHttpClient(bankzugaengeUrl).get(Bankzugang.class);
     }
 
