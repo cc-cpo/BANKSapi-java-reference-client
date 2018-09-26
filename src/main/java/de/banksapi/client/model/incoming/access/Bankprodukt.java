@@ -1,5 +1,7 @@
 package de.banksapi.client.model.incoming.access;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.banksapi.client.model.LocalDateTimeDeserializer;
 import de.banksapi.client.model.incoming.Relation;
@@ -12,7 +14,7 @@ import java.util.Collection;
  * A Bankprodukt (banking product) is BANKSapi's representation of a bank account, depot or credit
  * card.
  */
-//@JsonIgnore
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Bankprodukt implements Relations {
 
     private String id;
@@ -44,7 +46,6 @@ public class Bankprodukt implements Relations {
     private Double ueberziehungslimit;
     private Double verfuegungsrahmen;
     private Double verfuegterBetrag;
-
 
     public String getId() {
         return id;
@@ -122,4 +123,5 @@ public class Bankprodukt implements Relations {
     public Double getVerfuegterBetrag() {
         return verfuegterBetrag;
     }
+
 }
