@@ -8,6 +8,7 @@ import de.banksapi.client.model.outgoing.access.Ueberweisung;
 import de.banksapi.client.services.internal.HttpClient.Response;
 
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,6 +87,15 @@ public class CustomerServiceREST extends CustomerServiceBase {
 
         return createAuthenticatingHttpClient(bankzugaengeUrl)
                 .post(loginCredentialsMapToUse, String.class);
+    }
+
+    public Response<String> disableBankzugaengeSync(String accountId) {
+        URL bankzugaengeUrl = buildUrl(CUSTOMER_CONTEXT, PATH_FMT_BANKZUGANG_SYNC, accountId);
+
+        Map<String, Object> request = Collections.singletonMap("sync", false);
+
+        return createAuthenticatingHttpClient(bankzugaengeUrl)
+                .put(request, String.class);
     }
     
     public Response<String> deleteBankzugaenge() {
