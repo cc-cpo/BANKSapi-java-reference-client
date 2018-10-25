@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static de.banksapi.client.services.internal.HttpHelper.buildUrl;
 
@@ -148,14 +149,14 @@ public class CustomerServiceREST extends CustomerServiceBase {
     }
 
     public Response<UeberweisungErgebnis> submitTextTan(String providerId, String productId,
-            String tan) {
-        URL submitTanUrl = buildUrl(CUSTOMER_CONTEXT, PATH_FMT_SUBMIT_TAN, providerId, productId, tan);
+            UUID transactionId, String tan) {
+        URL submitTanUrl = buildUrl(CUSTOMER_CONTEXT, PATH_FMT_SUBMIT_TAN, providerId, productId, transactionId.toString());
 
         Map<String, String> submitTanBody = new HashMap<>();
         submitTanBody.put("tan", tan);
 
         return createAuthenticatingHttpClient(submitTanUrl)
-                .post(submitTanBody, UeberweisungErgebnis.class);
+                .put(submitTanBody, UeberweisungErgebnis.class);
     }
 
 }
