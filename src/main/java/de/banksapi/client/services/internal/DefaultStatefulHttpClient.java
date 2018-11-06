@@ -36,8 +36,7 @@ public class DefaultStatefulHttpClient implements IHTTPClientUnconfigured {
             httpsURLConnection = (HttpsURLConnection) this.url.openConnection();
             httpsURLConnection.setConnectTimeout(connectTimeout);
             httpsURLConnection.setReadTimeout(readTimeout);
-            objectMapper = new ObjectMapper().setPropertyNamingStrategy(
-                    de.banksapi.client.services.PropertyNamingStrategy.LOWER_CAMEL_CASE.toJacksonStrategy());
+            objectMapper = new ObjectMapper();
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Invalid URL '" + url + "'", e);
         } catch (IOException e) {

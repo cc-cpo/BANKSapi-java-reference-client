@@ -19,6 +19,7 @@ public abstract class AbstractAuthorizedBaseService extends AbstractBaseService 
         final IHTTPClientUnconfigured client = getClientFactory().createClient(requestUrl);
         client.setHeader("Content-type", "application/json");
         client.setHeader("Authorization", "bearer " + getOAuth2Token().getAccessToken());
+        client.setObjectMapperPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
         return client;
     }
 
