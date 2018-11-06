@@ -8,7 +8,7 @@ import de.banksapi.client.model.outgoing.access.LoginCredentialsMap;
 import de.banksapi.client.model.outgoing.access.Ueberweisung;
 import de.banksapi.client.services.CustomerServiceREST;
 import de.banksapi.client.services.OAuth2Service;
-import de.banksapi.client.services.internal.HttpClient.Response;
+import de.banksapi.client.services.Response;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -39,6 +39,8 @@ public class CustomerServiceRESTTest implements BanksapiTest {
 
     private LoginCredentialsMap loginCredentialsMap;
 
+    private CryptoService cryptoService;
+
     @Parameterized.Parameters(name = "{0}")
     public static Collection<LoginCredentialsMap> data() {
         return Arrays.asList(getCredentialsMap(false), getCredentialsMap(true));
@@ -46,15 +48,16 @@ public class CustomerServiceRESTTest implements BanksapiTest {
 
     public CustomerServiceRESTTest(LoginCredentialsMap loginCredentialsMap) {
         this.loginCredentialsMap = loginCredentialsMap;
+        URL pem = CryptoServiceTest.class.getResource("/public.pem");
+        this.cryptoService = CryptoService.fromX509PEMs(pem.getPath());
     }
 
     @Before
     public void setUp() throws Exception {
         if (customerService == null) {
-            OAuth2Token token = new OAuth2Service().getUserToken(CLIENT_USERNAME, CLIENT_PASSWORD,
+            OAuth2Service oAuth2Service = new OAuth2Service();
+            OAuth2Token token = oAuth2Service.getUserToken(CLIENT_USERNAME, CLIENT_PASSWORD,
                     USERNAME, PASSWORD);
-            URL pem = CryptoServiceTest.class.getResource("/public.pem");
-            CryptoService cryptoService = CryptoService.fromX509PEMs(pem.getPath());
             customerService = new CustomerServiceREST(token, cryptoService);
         }
     }
@@ -151,7 +154,7 @@ public class CustomerServiceRESTTest implements BanksapiTest {
 
     @Test
     public void test110GetBankzugang() {
-        Response<Bankzugang> response = customerService.getBankzugang(loginCredentialsMap.getFirstAccountId());
+        Response<Bankzugang> response = customerService.getBankzugang(loginCredentialsMap.getOnlyAccountId());
         basicResponseCheck(response, 404);
     }
 
@@ -169,7 +172,7 @@ public class CustomerServiceRESTTest implements BanksapiTest {
                 .withEmpfaenger("Jane Doe")
                 .withVerwendungszweck("Test")
                 .withIban("DE44500105175407324931")
-                .withCredentials(loginCredentialsMap.get(loginCredentialsMap.getFirstAccountId()).getCredentials())
+                .withCredentials(loginCredentialsMap.get(loginCredentialsMap.getOnlyAccountId()).getCredentials())
                 .withTanMediumName("")
                 .withSicherheitsverfahrenKodierung("0")
                 .build();
@@ -181,7 +184,7 @@ public class CustomerServiceRESTTest implements BanksapiTest {
                 .orElseThrow(() -> new IllegalStateException("account has no products able to " +
                         "perform transfers"));
 
-        UUID providerId = loginCredentialsMap.get(loginCredentialsMap.getFirstAccountId()).getProviderId();
+        UUID providerId = loginCredentialsMap.get(loginCredentialsMap.getOnlyAccountId()).getProviderId();
         Response<UeberweisungErgebnis> response = customerService.createUeberweisung(providerId.toString(),
                 capableBankingProduct.getId(), transfer);
         basicResponseCheckData(response, 200, "create transfer");
@@ -192,10 +195,10 @@ public class CustomerServiceRESTTest implements BanksapiTest {
         Response<String> addResponse = customerService.addBankzugaenge(loginCredentialsMap);
         basicResponseCheck(addResponse, 201);
 
-        Response<Bankzugang> getResponse = customerService.getBankzugang(loginCredentialsMap.getFirstAccountId());
+        Response<Bankzugang> getResponse = customerService.getBankzugang(loginCredentialsMap.getOnlyAccountId());
         basicResponseCheck(getResponse, 200);
 
-        Response<String> deleteResponse = customerService.deleteBankzugang(loginCredentialsMap.getFirstAccountId());
+        Response<String> deleteResponse = customerService.deleteBankzugang(loginCredentialsMap.getOnlyAccountId());
         basicResponseCheck(deleteResponse, 200);
     }
 

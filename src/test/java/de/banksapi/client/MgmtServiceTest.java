@@ -5,13 +5,12 @@ import de.banksapi.client.model.incoming.oauth2.OAuth2Token;
 import de.banksapi.client.model.outgoing.mgmt.UserOut;
 import de.banksapi.client.services.MgmtService;
 import de.banksapi.client.services.OAuth2Service;
-import de.banksapi.client.services.internal.HttpClient.Response;
+import de.banksapi.client.services.Response;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import java.net.URL;
 import java.util.UUID;
 
 import static de.banksapi.client.TestAuthData.ADMIN_CLIENT_PASSWORD;
@@ -27,11 +26,12 @@ public class MgmtServiceTest implements BanksapiTest {
     private static UUID addedUser;
     private static String addedUsername;
     private static boolean init = false;
+    private static BANKSapi banksApi;
 
     @Before
     public void setUp() throws Exception {
         if (!init) {
-            BANKSapi.init(new URL("https://localhost"));
+            banksApi = new SimpleBANKSapi();
             init = true;
         }
 

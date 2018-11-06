@@ -5,7 +5,7 @@ import de.banksapi.client.model.incoming.providers.Provider;
 import de.banksapi.client.model.incoming.providers.ProviderList;
 import de.banksapi.client.services.OAuth2Service;
 import de.banksapi.client.services.ProvidersService;
-import de.banksapi.client.services.internal.HttpClient.Response;
+import de.banksapi.client.services.Response;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -19,6 +19,7 @@ public class ProvidersServiceTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
+        BANKSapi banksApi = new SimpleBANKSapi();
         OAuth2Token token = new OAuth2Service().getUserToken(CLIENT_USERNAME, CLIENT_PASSWORD,
                 USERNAME, PASSWORD);
         providersService = new ProvidersService(token);

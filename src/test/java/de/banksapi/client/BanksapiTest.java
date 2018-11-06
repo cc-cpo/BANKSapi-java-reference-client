@@ -1,6 +1,7 @@
 package de.banksapi.client;
 
-import de.banksapi.client.services.internal.HttpClient.Response;
+import de.banksapi.client.model.incoming.access.BankzugangMap;
+import de.banksapi.client.services.Response;
 
 import java.util.UUID;
 
@@ -8,7 +9,7 @@ import static org.junit.Assert.fail;
 
 public interface BanksapiTest {
 
-    default void basicResponseCheck(Response response, Integer expectedHttpCode) {
+    default void basicResponseCheck(Response<?> response, Integer expectedHttpCode) {
         Integer actualHttpCode = response.getHttpCode();
         if (!expectedHttpCode.equals(actualHttpCode)) {
             assert response.getError() == null : generateErrorMessage(response);
@@ -16,7 +17,7 @@ public interface BanksapiTest {
         }
     }
 
-    default void basicResponseCheckData(Response response, int expectedHttpCode, String subject) {
+    default void basicResponseCheckData(Response<?> response, int expectedHttpCode, String subject) {
         basicResponseCheck(response, expectedHttpCode);
         assert response.getData() != null : "Unable to perform '" + subject + "' request (" +
                 generateErrorMessage(response) + ")";

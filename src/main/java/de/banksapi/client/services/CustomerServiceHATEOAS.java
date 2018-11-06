@@ -5,7 +5,6 @@ import de.banksapi.client.model.incoming.access.*;
 import de.banksapi.client.model.incoming.oauth2.OAuth2Token;
 import de.banksapi.client.model.outgoing.access.LoginCredentialsMap;
 import de.banksapi.client.model.outgoing.access.Ueberweisung;
-import de.banksapi.client.services.internal.HttpClient.Response;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -22,6 +21,8 @@ import static de.banksapi.client.services.internal.HttpHelper.buildUrl;
  * @see <a href="https://docs.banksapi.de/customer.html">Banks/Connect Customer API</a>
  */
 public class CustomerServiceHATEOAS extends CustomerServiceBase {
+
+    private CryptoService cryptoService;
 
     /**
      * Creates a new instance of the customer service without encryption capability.
@@ -46,11 +47,12 @@ public class CustomerServiceHATEOAS extends CustomerServiceBase {
      * @param cryptoService Crypto service to use for credentials encryption
      */
     public CustomerServiceHATEOAS(OAuth2Token oAuth2Token, CryptoService cryptoService) {
-        super(oAuth2Token, cryptoService);
+        super(oAuth2Token);
+        this.cryptoService = cryptoService;
     }
 
     public Response<Customer> getCustomer() {
-        return createAuthenticatingHttpClient(CUSTOMER_CONTEXT).get(Customer.class);
+        return createAuthenticatingHttpClient(getCustomerContext()).get(Customer.class);
     }
 
     public Response<BankzugangMap> getBankzugaenge(Customer customer) {
@@ -61,7 +63,7 @@ public class CustomerServiceHATEOAS extends CustomerServiceBase {
     public Response<String> addBankzugaenge(Customer customer, LoginCredentialsMap loginCredentialsMap) {
         LoginCredentialsMap loginCredentialsMapToUse = loginCredentialsMap;
         if (cryptoService != null) {
-            loginCredentialsMapToUse = encryptLoginCredentialsMap(loginCredentialsMap);
+            loginCredentialsMapToUse = cryptoService.encryptLoginCredentialsMap(loginCredentialsMap);
         }
 
         return createAuthenticatingHttpClient(customer.getUrlForRelation("add_bankzugaenge"))
@@ -79,12 +81,12 @@ public class CustomerServiceHATEOAS extends CustomerServiceBase {
     }
 
     public Response<Bankzugang> getBankzugang(String accountId) {
-        URL bankzugaengeUrl = buildUrl(CUSTOMER_CONTEXT, PATH_FMT_BANKZUGANG, accountId);
+        URL bankzugaengeUrl = buildUrl(getCustomerContext(), PATH_FMT_BANKZUGANG, accountId);
         return createAuthenticatingHttpClient(bankzugaengeUrl).get(Bankzugang.class);
     }
 
     public Response<Bankprodukt> getBankprodukt(String accountId, String productId) {
-        URL bankzugaengeUrl = buildUrl(CUSTOMER_CONTEXT, PATH_FMT_PRODUKT, accountId, productId);
+        URL bankzugaengeUrl = buildUrl(getCustomerContext(), PATH_FMT_PRODUKT, accountId, productId);
         return createAuthenticatingHttpClient(bankzugaengeUrl).get(Bankprodukt.class);
     }
 
@@ -102,7 +104,7 @@ public class CustomerServiceHATEOAS extends CustomerServiceBase {
             Ueberweisung ueberweisung) {
         if (cryptoService != null) {
             ueberweisung = new Ueberweisung(ueberweisung,
-                    encryptCredentials(ueberweisung.getCredentials()));
+                    cryptoService.encryptCredentials(ueberweisung.getCredentials()));
         }
 
         return createAuthenticatingHttpClient(bankprodukt.getUrlForRelation("start_ueberweisung"))

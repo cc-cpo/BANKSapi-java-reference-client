@@ -1,16 +1,14 @@
 package de.banksapi.client.services;
 
 import de.banksapi.client.model.incoming.oauth2.OAuth2Token;
-import de.banksapi.client.services.internal.HttpClient;
-import de.banksapi.client.services.internal.HttpClient.Response;
 import de.banksapi.client.services.internal.HttpHelper;
+import de.banksapi.client.services.internal.IHTTPClient;
+import de.banksapi.client.services.internal.IHTTPClientUnconfigured;
 
 import java.net.URL;
 import java.util.Base64;
 import java.util.Objects;
 
-import static de.banksapi.client.BANKSapi.getBanksapiBase;
-import static de.banksapi.client.services.internal.HttpClient.PropertyNamingStrategy.SNAKE_CASE;
 import static de.banksapi.client.services.internal.HttpHelper.buildUrl;
 
 /**
@@ -19,11 +17,16 @@ import static de.banksapi.client.services.internal.HttpHelper.buildUrl;
  *
  * @see <a href="https://docs.banksapi.de/auth.html#oauth2-api-referenz">BANKSapi Auth OAuth2 API</a>
  */
-public class OAuth2Service {
-
-    private final static URL AUTH_CONTEXT = HttpHelper.buildUrl(getBanksapiBase(), "auth/");
-
+public class OAuth2Service extends AbstractBaseService {
     private final static Base64.Encoder base64Encoder = Base64.getEncoder();
+
+    IHTTPClient createUnauthenticatedHttpClient(URL requestUrl, String httpBasicAuth) {
+        IHTTPClientUnconfigured client = getClientFactory().createClient(requestUrl);
+        client.setHeader("Content-type", "application/x-www-form-urlencoded");
+        client.setHeader("Authorization", "basic " + httpBasicAuth);
+        client.setObjectMapperPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+        return client;
+    }
 
     public OAuth2Token getClientToken(String clientUser, String clientPassword) {
         return getClientToken(createHttpBasicAuth(clientUser, clientPassword));
@@ -32,11 +35,9 @@ public class OAuth2Service {
     public OAuth2Token getClientToken(String httpBasicAuth) {
         Objects.requireNonNull(httpBasicAuth);
 
-        URL tokenUrl = buildUrl(AUTH_CONTEXT, "oauth2/token");
+        URL tokenUrl = buildUrl(getAuthContext(), "oauth2/token");
 
-        Response<OAuth2Token> response = new HttpClient(tokenUrl, SNAKE_CASE)
-                .setHeader("Content-type", "application/x-www-form-urlencoded")
-                .setHeader("Authorization", "basic " + httpBasicAuth)
+        Response<OAuth2Token> response = createUnauthenticatedHttpClient(tokenUrl, httpBasicAuth)
                 .post("grant_type=client_credentials", OAuth2Token.class);
 
         return response.getData();
@@ -52,13 +53,11 @@ public class OAuth2Service {
         Objects.requireNonNull(username);
         Objects.requireNonNull(password);
 
-        URL tokenUrl = buildUrl(AUTH_CONTEXT, "oauth2/token");
+        URL tokenUrl = buildUrl(getAuthContext(), "oauth2/token");
         String post = String.format("grant_type=password&username=%s&password=%s",
                 username, password);
 
-        Response<OAuth2Token> response = new HttpClient(tokenUrl, SNAKE_CASE)
-                .setHeader("Content-type", "application/x-www-form-urlencoded")
-                .setHeader("Authorization", "basic " + httpBasicAuth)
+        Response<OAuth2Token> response = createUnauthenticatedHttpClient(tokenUrl, httpBasicAuth)
                 .post(post, OAuth2Token.class);
 
         return response.getData();
@@ -72,4 +71,7 @@ public class OAuth2Service {
         return base64Encoder.encodeToString(userPassword.getBytes());
     }
 
+    URL getAuthContext() {
+        return HttpHelper.buildUrl(getBanksApiBase(),  "auth/");
+    }
 }

@@ -3,14 +3,12 @@ package de.banksapi.client.services;
 import de.banksapi.client.model.incoming.oauth2.OAuth2Token;
 import de.banksapi.client.model.incoming.providers.Provider;
 import de.banksapi.client.model.incoming.providers.ProviderList;
-import de.banksapi.client.services.internal.HttpClient;
+import de.banksapi.client.services.internal.DefaultStatefulHttpClient;
 import de.banksapi.client.services.internal.HttpHelper;
 
 import java.net.URL;
-import java.util.Objects;
 import java.util.UUID;
 
-import static de.banksapi.client.BANKSapi.getBanksapiBase;
 import static de.banksapi.client.services.internal.HttpHelper.buildUrl;
 
 /**
@@ -19,12 +17,7 @@ import static de.banksapi.client.services.internal.HttpHelper.buildUrl;
  *
  * @see <a href="https://docs.banksapi.de/providers.html">Banks/Connect Providers API</a>
  */
-public class ProvidersService implements OAuthAwareService {
-
-    private final static URL PROVIDERS_CONTEXT = HttpHelper.buildUrl(getBanksapiBase(),
-            "providers/v2/");
-
-    private OAuth2Token oAuth2Token;
+public class ProvidersService extends AbstractAuthorizedBaseService {
 
     /**
      * Creates a new instance of the providers service.
@@ -32,22 +25,19 @@ public class ProvidersService implements OAuthAwareService {
      * @param oAuth2Token a valid OAuth2 token to send along all requests
      */
     public ProvidersService(OAuth2Token oAuth2Token) {
-        Objects.requireNonNull(oAuth2Token);
-        this.oAuth2Token = oAuth2Token;
+        super(oAuth2Token);
     }
 
-    public HttpClient.Response<ProviderList> getProviders() {
-        return createAuthenticatingHttpClient(PROVIDERS_CONTEXT).get(ProviderList.class);
+    public Response<ProviderList> getProviders() {
+        return createAuthenticatingHttpClient(getProvidersContext()).get(ProviderList.class);
     }
 
-    public HttpClient.Response<Provider> getProvider(UUID providerId) {
-        URL providerUrl = buildUrl(PROVIDERS_CONTEXT, providerId.toString());
+    public Response<Provider> getProvider(UUID providerId) {
+        URL providerUrl = buildUrl(getProvidersContext(), providerId.toString());
         return createAuthenticatingHttpClient(providerUrl).get(Provider.class);
     }
 
-    @Override
-    public OAuth2Token getOAuth2Token() {
-        return oAuth2Token;
+    URL getProvidersContext() {
+        return HttpHelper.buildUrl(super.getBanksApiBase(), "providers/v2/");
     }
-
 }

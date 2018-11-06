@@ -2,6 +2,8 @@ package de.banksapi.client.services.internal;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.banksapi.client.services.PropertyNamingStrategy;
+import de.banksapi.client.services.Response;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -15,9 +17,9 @@ import static de.banksapi.client.services.internal.StringUtil.isBlank;
  * This class provides basic HTTP communication functions via {@link HttpsURLConnection} and acts
  * as a facade to ease the integration of a different HTTP client such as OkHttp, Apache CXF, Apache
  * HttpComponents and so on.
- * <p>This client is stateful and you should use one {@link HttpClient} instance per request.</p>
+ * <p>This client is stateful and you should use one {@link DefaultStatefulHttpClient} instance per request.</p>
  */
-public class HttpClient {
+public class DefaultStatefulHttpClient implements IHTTPClientUnconfigured {
 
     private URL url;
 
@@ -28,14 +30,14 @@ public class HttpClient {
     private final static int connectTimeout = 30000; // 30 seconds in ms
     private final static int readTimeout = 300000; // five minutes in ms
 
-    public HttpClient(URL url, PropertyNamingStrategy propertyNamingStrategy) {
+    public DefaultStatefulHttpClient(URL url) {
         try {
             this.url = url;
             httpsURLConnection = (HttpsURLConnection) this.url.openConnection();
             httpsURLConnection.setConnectTimeout(connectTimeout);
             httpsURLConnection.setReadTimeout(readTimeout);
             objectMapper = new ObjectMapper().setPropertyNamingStrategy(
-                    propertyNamingStrategy.toJacksonStrategy());
+                    de.banksapi.client.services.PropertyNamingStrategy.LOWER_CAMEL_CASE.toJacksonStrategy());
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Invalid URL '" + url + "'", e);
         } catch (IOException e) {
@@ -43,7 +45,11 @@ public class HttpClient {
         }
     }
 
-    public HttpClient setHeader(String key, String value) {
+    public void setObjectMapperPropertyNamingStrategy(PropertyNamingStrategy namingStrategy) {
+        this.objectMapper.setPropertyNamingStrategy(namingStrategy.toJacksonStrategy());
+    }
+
+    public IHTTPClientUnconfigured setHeader(String key, String value) {
         httpsURLConnection.setRequestProperty(key, value);
         return this;
     }
@@ -137,7 +143,7 @@ public class HttpClient {
     }
 
     private <T> Response<T> performRequest(Class<T> responseClass) {
-        Response<T> response = new Response<>();
+        final ResponseImpl<T> response = new ResponseImpl<>();
 
         try {
             response.httpCode = httpsURLConnection.getResponseCode();
@@ -183,55 +189,6 @@ public class HttpClient {
         }
 
         return builder.toString();
-    }
-
-    public static class Response<T> {
-
-        private Integer httpCode;
-        private T data;
-        private String error;
-        private String location;
-
-        public Integer getHttpCode() {
-            return httpCode;
-        }
-
-        public T getData() {
-            return data;
-        }
-
-        public String getError() {
-            return error;
-        }
-
-        public String getLocation() {
-            return location;
-        }
-
-        public URL getLocationAsUrl() {
-            try {
-                return new URL(location);
-            } catch (MalformedURLException e) {
-                throw new IllegalStateException("Location '" + location + "' holds an invalid URL", e);
-            }
-        }
-
-    }
-
-    public enum PropertyNamingStrategy {
-        SNAKE_CASE,
-        LOWER_CAMEL_CASE;
-
-        private com.fasterxml.jackson.databind.PropertyNamingStrategy toJacksonStrategy() {
-            switch (this) {
-                case SNAKE_CASE:
-                    return com.fasterxml.jackson.databind.PropertyNamingStrategy.SNAKE_CASE;
-                case LOWER_CAMEL_CASE:
-                    return com.fasterxml.jackson.databind.PropertyNamingStrategy.LOWER_CAMEL_CASE;
-                default:
-                    return null;
-            }
-        }
     }
 
 }

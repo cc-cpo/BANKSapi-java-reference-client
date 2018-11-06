@@ -12,7 +12,8 @@ public class OAuth2ServiceTest {
     private static de.banksapi.client.services.OAuth2Service oAuth2Service;
 
     @BeforeClass
-    public static void setUp() {
+    public static void setUp() throws Exception {
+        BANKSapi banksApi = new SimpleBANKSapi();
         oAuth2Service = new OAuth2Service();
     }
 

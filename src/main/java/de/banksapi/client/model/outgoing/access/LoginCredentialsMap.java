@@ -1,10 +1,13 @@
 package de.banksapi.client.model.outgoing.access;
 
+import de.banksapi.client.services.internal.Preconditions;
+
 import java.util.HashMap;
 
 public class LoginCredentialsMap extends HashMap<String, LoginCredentials> {
 
-    public String getFirstAccountId() {
+    public String getOnlyAccountId() {
+        Preconditions.checkState(size() == 1);
         return keySet().iterator().next();
     }
 
