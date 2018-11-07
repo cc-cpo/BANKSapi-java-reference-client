@@ -1,9 +1,9 @@
 package de.banksapi.client.services;
 
 import de.banksapi.client.BanksapiConfig;
+import de.banksapi.client.services.internal.ICorrelationIdStrategy;
 import de.banksapi.client.services.internal.IHTTPClientFactory;
 import de.banksapi.client.services.internal.Preconditions;
-import de.banksapi.client.services.internal.SimpleHTTPClientFactory;
 
 import java.net.URL;
 
@@ -13,6 +13,8 @@ public abstract class AbstractBaseService {
 
     private IHTTPClientFactory clientFactory;
 
+    private ICorrelationIdStrategy correlationIdStrategy;
+
     public void setClientFactory(IHTTPClientFactory clientFactory) {
         this.clientFactory = clientFactory;
     }
@@ -20,6 +22,7 @@ public abstract class AbstractBaseService {
     protected IHTTPClientFactory getClientFactory() {
         Preconditions.checkState(banksapiConfig != null,
                 "Incomplete service setup - use setter injection via setClientFactory");
+        Preconditions.checkState(this.clientFactory == null, "Already defined!");
         return clientFactory;
     }
 
@@ -30,7 +33,19 @@ public abstract class AbstractBaseService {
     }
 
     public void setBanksapiConfig(BanksapiConfig bankSapi) {
+        Preconditions.checkState(this.banksapiConfig == null, "Already defined!");
         this.banksapiConfig = bankSapi;
     }
 
+    /**
+     * @return optional strategy
+     */
+    public ICorrelationIdStrategy getCorrelationIdStrategy() {
+        return correlationIdStrategy;
+    }
+
+    public void setCorrelationIdStrategy(ICorrelationIdStrategy correlationIdStrategy) {
+        Preconditions.checkState(this.correlationIdStrategy == null, "Already defined!");
+        this.correlationIdStrategy = correlationIdStrategy;
+    }
 }

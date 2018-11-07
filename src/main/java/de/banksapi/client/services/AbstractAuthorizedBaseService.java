@@ -5,6 +5,7 @@ import de.banksapi.client.services.internal.*;
 
 import java.net.URL;
 import java.util.Objects;
+import java.util.UUID;
 
 public abstract class AbstractAuthorizedBaseService extends AbstractBaseService {
 
@@ -20,6 +21,12 @@ public abstract class AbstractAuthorizedBaseService extends AbstractBaseService 
         client.setHeader("Content-type", "application/json");
         client.setHeader("Authorization", "bearer " + getOAuth2Token().getAccessToken());
         client.setObjectMapperPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
+
+        if (getCorrelationIdStrategy() != null) {
+            final UUID correlationId = getCorrelationIdStrategy().getCorrelationId();
+            client.setHeader("X-Correlation-ID", correlationId.toString());
+        }
+
         return client;
     }
 
