@@ -1,18 +1,17 @@
 package de.banksapi.client.services;
 
 import de.banksapi.client.BanksapiConfig;
-import de.banksapi.client.SimpleBanksapiConfig;
-import de.banksapi.client.services.internal.SimpleHTTPClientFactory;
 import de.banksapi.client.services.internal.IHTTPClientFactory;
 import de.banksapi.client.services.internal.Preconditions;
+import de.banksapi.client.services.internal.SimpleHTTPClientFactory;
 
 import java.net.URL;
 
 public abstract class AbstractBaseService {
 
-    private BanksapiConfig banksapiConfig = new SimpleBanksapiConfig();
+    private BanksapiConfig banksapiConfig;
 
-    private IHTTPClientFactory clientFactory = new SimpleHTTPClientFactory();
+    private IHTTPClientFactory clientFactory;
 
     public void setClientFactory(IHTTPClientFactory clientFactory) {
         this.clientFactory = clientFactory;
