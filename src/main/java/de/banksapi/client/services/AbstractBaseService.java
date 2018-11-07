@@ -16,13 +16,13 @@ public abstract class AbstractBaseService {
     private ICorrelationIdStrategy correlationIdStrategy;
 
     public void setClientFactory(IHTTPClientFactory clientFactory) {
+        Preconditions.checkState(this.clientFactory == null, "Already defined!");
         this.clientFactory = clientFactory;
     }
 
     protected IHTTPClientFactory getClientFactory() {
         Preconditions.checkState(banksapiConfig != null,
                 "Incomplete service setup - use setter injection via setClientFactory");
-        Preconditions.checkState(this.clientFactory == null, "Already defined!");
         return clientFactory;
     }
 
