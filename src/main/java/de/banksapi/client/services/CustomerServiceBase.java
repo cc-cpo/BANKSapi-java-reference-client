@@ -17,6 +17,7 @@ class CustomerServiceBase extends AbstractAuthorizedBaseService {
     final static String PATH_FMT_UEBERWEISUNG = "ueberweisung/%s/%s";
     final static String PATH_FMT_SUBMIT_TAN = "ueberweisung/%s/%s/%s";
 
+
     CustomerServiceBase(OAuth2Token oAuth2Token) {
         super(oAuth2Token);
     }

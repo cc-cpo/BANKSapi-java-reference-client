@@ -78,7 +78,7 @@ public class MgmtService extends AbstractAuthorizedBaseService {
     public Response<String> addClientRoleUser(String tenantName, String clientName, String roleName,
             UUID userId) {
         URL roleUrl = buildUrl(getAuthContext(), PATH_FMT_ROLE_USERS, tenantName, clientName, roleName);
-        return createAuthenticatingHttpClient(roleUrl).post(userId.toString(), String.class);
+        return createAuthenticatingHttpClient(roleUrl).postForm(userId.toString(), String.class);
     }
 
     public Response<UUID> getClientRoleUser(String tenantName, String clientName, String roleName,

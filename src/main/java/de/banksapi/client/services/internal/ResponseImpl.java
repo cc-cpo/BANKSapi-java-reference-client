@@ -12,6 +12,16 @@ public class ResponseImpl<T> implements Response<T> {
     String error;
     String location;
 
+    ResponseImpl() {
+    }
+
+    public ResponseImpl(Integer httpCode, T data, String error, String location) {
+        this.httpCode = httpCode;
+        this.data = data;
+        this.error = error;
+        this.location = location;
+    }
+
     public Integer getHttpCode() {
         return httpCode;
     }
@@ -36,4 +46,9 @@ public class ResponseImpl<T> implements Response<T> {
         }
     }
 
+    @Override
+    public String toString() {
+        return String.format("Response code <%d> with data <%s> (%s)",
+            httpCode, data, error != null ? String.format("error <%s>", error) : "no error string");
+    }
 }

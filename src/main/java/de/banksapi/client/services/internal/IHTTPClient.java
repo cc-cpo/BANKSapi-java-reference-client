@@ -3,11 +3,14 @@ package de.banksapi.client.services.internal;
 import de.banksapi.client.services.Response;
 
 public interface IHTTPClient {
-    <T> Response<T> post(String postData, Class<T> responseClass);
+
+    /**
+     * post as url-encoded form
+     * note: all other methods use application/json requests
+     */
+    <T> Response<T> postForm(String postData, Class<T> responseClass);
 
     <U, T> Response<T> post(U postData, Class<T> responseClass);
-
-    <T> Response<T> post(Class<T> responseClass);
 
     <U, T> Response<T> put(U putData, Class<T> responseClass);
 

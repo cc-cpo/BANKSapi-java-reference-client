@@ -100,7 +100,7 @@ public class CustomerServiceREST extends CustomerServiceBase {
         return createAuthenticatingHttpClient(bankzugaengeUrl)
                 .put(request, String.class);
     }
-    
+
     public Response<String> deleteBankzugaenge() {
         URL bankzugaengeUrl = buildUrl(getCustomerContext(), PATH_FMT_BANKZUGAENGE);
         return createAuthenticatingHttpClient(bankzugaengeUrl).delete();

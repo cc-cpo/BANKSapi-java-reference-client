@@ -53,7 +53,7 @@ public class DefaultStatefulHttpClient implements IHTTPClientUnconfigured {
         return this;
     }
 
-    public <T> Response<T> post(String postData, Class<T> responseClass) {
+    public <T> Response<T> postForm(String postData, Class<T> responseClass) {
         try {
             httpsURLConnection.setRequestMethod("POST");
             httpsURLConnection.setDoOutput(true);
@@ -69,7 +69,7 @@ public class DefaultStatefulHttpClient implements IHTTPClientUnconfigured {
 
     public <U, T> Response<T> post(U postData, Class<T> responseClass) {
         try {
-            return post(objectMapper.writeValueAsString(postData), responseClass);
+            return postForm(objectMapper.writeValueAsString(postData), responseClass);
         } catch (JsonProcessingException e) {
             throw new JsonSerializationException("Unable to serialize object to JSON", e);
         }

@@ -15,7 +15,7 @@ public abstract class AbstractAuthorizedBaseService extends AbstractBaseService 
         this.oAuth2Token = oAuth2Token;
     }
 
-    IHTTPClient createAuthenticatingHttpClient(URL requestUrl) {
+    protected IHTTPClient createAuthenticatingHttpClient(URL requestUrl) {
         final IHTTPClientUnconfigured client = getClientFactory().createClient(requestUrl);
         client.setHeader("Content-type", "application/json");
         client.setHeader("Authorization", "bearer " + getOAuth2Token().getAccessToken());

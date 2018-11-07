@@ -5,7 +5,7 @@
     <name>BANKSapi Reference Client</name>
     <groupId>de.banksapi</groupId>
     <artifactId>reference-client</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>v2.0.0-SNAPSHOT</version>
 
     <licenses>
         <license>

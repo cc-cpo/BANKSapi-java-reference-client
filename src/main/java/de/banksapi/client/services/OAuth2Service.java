@@ -38,7 +38,7 @@ public class OAuth2Service extends AbstractBaseService {
         URL tokenUrl = buildUrl(getAuthContext(), "oauth2/token");
 
         Response<OAuth2Token> response = createUnauthenticatedHttpClient(tokenUrl, httpBasicAuth)
-                .post("grant_type=client_credentials", OAuth2Token.class);
+                .postForm("grant_type=client_credentials", OAuth2Token.class);
 
         return response.getData();
     }
@@ -58,7 +58,7 @@ public class OAuth2Service extends AbstractBaseService {
                 username, password);
 
         Response<OAuth2Token> response = createUnauthenticatedHttpClient(tokenUrl, httpBasicAuth)
-                .post(post, OAuth2Token.class);
+                .postForm(post, OAuth2Token.class);
 
         return response.getData();
     }
