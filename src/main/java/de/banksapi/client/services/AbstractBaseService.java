@@ -1,8 +1,6 @@
 package de.banksapi.client.services;
 
 import de.banksapi.client.BanksapiConfig;
-import de.banksapi.client.services.internal.ICorrelationIdStrategy;
-import de.banksapi.client.services.internal.IHTTPClientFactory;
 import de.banksapi.client.services.internal.Preconditions;
 
 import java.net.URL;

@@ -1,4 +1,4 @@
-package de.banksapi.client.services.internal;
+package de.banksapi.client.services;
 
 import java.util.UUID;
 

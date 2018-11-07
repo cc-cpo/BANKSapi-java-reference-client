@@ -28,12 +28,12 @@ public class ProvidersService extends AbstractAuthorizedBaseService {
     }
 
     public Response<ProviderList> getProviders() {
-        return createAuthenticatingHttpClient(getProvidersContext()).get(ProviderList.class);
+        return createAuthenticatedHttpClient(getProvidersContext()).get(ProviderList.class);
     }
 
     public Response<Provider> getProvider(UUID providerId) {
         URL providerUrl = buildUrl(getProvidersContext(), providerId.toString());
-        return createAuthenticatingHttpClient(providerUrl).get(Provider.class);
+        return createAuthenticatedHttpClient(providerUrl).get(Provider.class);
     }
 
     URL getProvidersContext() {

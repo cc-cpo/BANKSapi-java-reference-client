@@ -2,6 +2,7 @@ package de.banksapi.client.services.internal;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.banksapi.client.services.IHTTPClientUnconfigured;
 import de.banksapi.client.services.PropertyNamingStrategy;
 import de.banksapi.client.services.Response;
 

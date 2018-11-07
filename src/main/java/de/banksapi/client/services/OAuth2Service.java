@@ -2,8 +2,6 @@ package de.banksapi.client.services;
 
 import de.banksapi.client.model.incoming.oauth2.OAuth2Token;
 import de.banksapi.client.services.internal.HttpHelper;
-import de.banksapi.client.services.internal.IHTTPClient;
-import de.banksapi.client.services.internal.IHTTPClientUnconfigured;
 
 import java.net.URL;
 import java.util.Base64;

@@ -1,7 +1,6 @@
 package de.banksapi.client.services;
 
 import de.banksapi.client.model.incoming.oauth2.OAuth2Token;
-import de.banksapi.client.services.internal.*;
 
 import java.net.URL;
 import java.util.Objects;
@@ -16,14 +15,15 @@ public abstract class AbstractAuthorizedBaseService extends AbstractBaseService 
         this.oAuth2Token = oAuth2Token;
     }
 
-    protected IHTTPClient createAuthenticatingHttpClient(URL requestUrl) {
+    protected IHTTPClient createAuthenticatedHttpClient(URL requestUrl) {
         final IHTTPClientUnconfigured client = getClientFactory().createClient(requestUrl);
-        client.setHeader("Content-type", "application/json");
-        client.setHeader("Authorization", "bearer " + getOAuth2Token().getAccessToken());
+        client.setHeader("Content-Type", "application/json");
+        client.setHeader("Authorization", "Bearer " + getOAuth2Token().getAccessToken());
         client.setObjectMapperPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
 
         if (getCorrelationIdStrategy() != null) {
             final UUID correlationId = getCorrelationIdStrategy().getCorrelationId();
+            Objects.requireNonNull(correlationId);
             client.setHeader("X-Correlation-ID", correlationId.toString());
         }
 

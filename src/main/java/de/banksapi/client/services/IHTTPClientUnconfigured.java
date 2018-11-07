@@ -1,6 +1,4 @@
-package de.banksapi.client.services.internal;
-
-import de.banksapi.client.services.PropertyNamingStrategy;
+package de.banksapi.client.services;
 
 public interface IHTTPClientUnconfigured extends IHTTPClient {
 

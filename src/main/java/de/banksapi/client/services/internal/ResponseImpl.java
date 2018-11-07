@@ -4,21 +4,24 @@ import de.banksapi.client.services.Response;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.UUID;
 
 public class ResponseImpl<T> implements Response<T> {
 
     Integer httpCode;
     T data;
     String error;
+    UUID correlationId;
     String location;
 
     ResponseImpl() {
     }
 
-    public ResponseImpl(Integer httpCode, T data, String error, String location) {
+    public ResponseImpl(Integer httpCode, T data, String error, UUID correlationId, String location) {
         this.httpCode = httpCode;
         this.data = data;
         this.error = error;
+        this.correlationId = correlationId;
         this.location = location;
     }
 
@@ -32,6 +35,13 @@ public class ResponseImpl<T> implements Response<T> {
 
     public String getError() {
         return error;
+    }
+
+    /**
+     * @return correlation id from header X-Correlation-ID or null
+     */
+    public UUID getCorrelationId() {
+        return correlationId;
     }
 
     public String getLocation() {

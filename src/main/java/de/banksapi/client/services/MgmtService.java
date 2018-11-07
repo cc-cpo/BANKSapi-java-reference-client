@@ -42,75 +42,75 @@ public class MgmtService extends AbstractAuthorizedBaseService {
 
     public Response<TenantList> getTenants() {
         URL tenantsUrl = buildUrl(getAuthContext(), PATH_FMT_TENANTS);
-        return createAuthenticatingHttpClient(tenantsUrl).get(TenantList.class);
+        return createAuthenticatedHttpClient(tenantsUrl).get(TenantList.class);
     }
 
     public Response<Tenant> getTenant(String tenantName) {
         URL tenantUrl = buildUrl(getAuthContext(), PATH_FMT_TENANT, tenantName);
-        return createAuthenticatingHttpClient(tenantUrl).get(Tenant.class);
+        return createAuthenticatedHttpClient(tenantUrl).get(Tenant.class);
     }
 
     public Response<ClientList> getClients(String tenantName) {
         URL clientsUrl = buildUrl(getAuthContext(), PATH_FMT_CLIENTS, tenantName);
-        return createAuthenticatingHttpClient(clientsUrl).get(ClientList.class);
+        return createAuthenticatedHttpClient(clientsUrl).get(ClientList.class);
     }
 
     public Response<Client> getClient(String tenantName, String clientName) {
         URL clientUrl = buildUrl(getAuthContext(), PATH_FMT_CLIENT, tenantName, clientName);
-        return createAuthenticatingHttpClient(clientUrl).get(Client.class);
+        return createAuthenticatedHttpClient(clientUrl).get(Client.class);
     }
 
     public Response<ClientRoleList> getClientRoles(String tenantName, String clientName) {
         URL rolesUrl = buildUrl(getAuthContext(), PATH_FMT_ROLES, tenantName, clientName);
-        return createAuthenticatingHttpClient(rolesUrl).get(ClientRoleList.class);
+        return createAuthenticatedHttpClient(rolesUrl).get(ClientRoleList.class);
     }
 
     public Response<ClientRole> getClientRole(String tenantName, String clientName, String roleName) {
         URL roleUrl = buildUrl(getAuthContext(), PATH_FMT_ROLE, tenantName, clientName, roleName);
-        return createAuthenticatingHttpClient(roleUrl).get(ClientRole.class);
+        return createAuthenticatedHttpClient(roleUrl).get(ClientRole.class);
     }
 
     public Response<UUIDList> getClientRoleUsers(String tenantName, String clientName, String roleName) {
         URL roleUrl = buildUrl(getAuthContext(), PATH_FMT_ROLE_USERS, tenantName, clientName, roleName);
-        return createAuthenticatingHttpClient(roleUrl).get(UUIDList.class);
+        return createAuthenticatedHttpClient(roleUrl).get(UUIDList.class);
     }
 
     public Response<String> addClientRoleUser(String tenantName, String clientName, String roleName,
             UUID userId) {
         URL roleUrl = buildUrl(getAuthContext(), PATH_FMT_ROLE_USERS, tenantName, clientName, roleName);
-        return createAuthenticatingHttpClient(roleUrl).postForm(userId.toString(), String.class);
+        return createAuthenticatedHttpClient(roleUrl).postForm(userId.toString(), String.class);
     }
 
     public Response<UUID> getClientRoleUser(String tenantName, String clientName, String roleName,
             UUID userId) {
         URL roleUrl = buildUrl(getAuthContext(), PATH_FMT_ROLE_USER, tenantName, clientName, roleName,
                 userId.toString());
-        return createAuthenticatingHttpClient(roleUrl).get(UUID.class);
+        return createAuthenticatedHttpClient(roleUrl).get(UUID.class);
     }
 
     public Response<UserInList> getUsers(String tenantName) {
         URL rolesUrl = buildUrl(getAuthContext(), PATH_FMT_USERS, tenantName);
-        return createAuthenticatingHttpClient(rolesUrl).get(UserInList.class);
+        return createAuthenticatedHttpClient(rolesUrl).get(UserInList.class);
     }
 
     public Response<UserIn> getUser(String tenantName, UUID userId) {
         URL rolesUrl = buildUrl(getAuthContext(), PATH_FMT_USER, tenantName, userId.toString());
-        return createAuthenticatingHttpClient(rolesUrl).get(UserIn.class);
+        return createAuthenticatedHttpClient(rolesUrl).get(UserIn.class);
     }
 
     public Response<String> addUser(String tenantName, UserOut user) {
         URL rolesUrl = buildUrl(getAuthContext(), PATH_FMT_USERS, tenantName);
-        return createAuthenticatingHttpClient(rolesUrl).post(user, String.class);
+        return createAuthenticatedHttpClient(rolesUrl).post(user, String.class);
     }
 
     public Response deactivateUser(String tenantName, UUID userId) {
         URL rolesUrl = buildUrl(getAuthContext(), PATH_FMT_USER_DEACTIVATE, tenantName, userId.toString());
-        return createAuthenticatingHttpClient(rolesUrl).put(null);
+        return createAuthenticatedHttpClient(rolesUrl).put(null);
     }
 
     public Response<UserIn> reactivateUser(String tenantName, UUID userId, UserOut user) {
         URL rolesUrl = buildUrl(getAuthContext(), PATH_FMT_USER_REACTIVATE, tenantName, userId.toString());
-        return createAuthenticatingHttpClient(rolesUrl).post(user, UserIn.class);
+        return createAuthenticatedHttpClient(rolesUrl).post(user, UserIn.class);
     }
 
     URL getAuthContext() {
