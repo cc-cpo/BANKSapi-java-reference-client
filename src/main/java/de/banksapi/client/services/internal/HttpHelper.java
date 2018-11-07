@@ -2,32 +2,33 @@ package de.banksapi.client.services.internal;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
 
 public class HttpHelper {
 
-    public static URL buildUrl(String spec) {
-        try {
-            return new URL(spec);
-        } catch (MalformedURLException e) {
-            throw new IllegalStateException("Malformed URL '" + spec + "'", e);
-        }
+    private HttpHelper() {
     }
 
-    public static URL buildUrl(URL context, String spec) {
+    private static URL buildUrlInternal(URL baseUrl, String path) {
+        Objects.requireNonNull(baseUrl);
+        if (path == null) {
+            return baseUrl;
+        }
         try {
-            return new URL(context, spec);
+            final boolean requireExtraSlash = !path.startsWith("/") && !baseUrl.getFile().endsWith("/");
+            return new URL(baseUrl.getProtocol(), baseUrl.getHost(), baseUrl.getPort(),
+                    String.format("%s%s%s", baseUrl.getFile(), requireExtraSlash ? "/" : "", path),
+                    null);
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Unable to build URL", e);
         }
     }
 
-    public static URL buildUrl(URL context, String pathFmt, String... pathParts) {
-        String path;
-        if (pathParts == null) {
-            path = pathFmt;
-        } else {
-            path = String.format(pathFmt, (Object[]) pathParts);
+    public static URL buildUrl(URL baseUrl, String pathFmt, String... pathParts) {
+        if (pathFmt == null) {
+            return baseUrl;
         }
-        return buildUrl(context, path);
+        final String path = String.format(pathFmt, (Object[]) pathParts);
+        return buildUrlInternal(baseUrl, path);
     }
 }

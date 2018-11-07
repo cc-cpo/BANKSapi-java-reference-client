@@ -2,9 +2,12 @@ package de.banksapi.client;
 
 import de.banksapi.client.model.incoming.oauth2.OAuth2Token;
 import de.banksapi.client.services.OAuth2Service;
+import de.banksapi.client.services.internal.HttpHelper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.net.URL;
 
 import static de.banksapi.client.TestAuthData.*;
 
