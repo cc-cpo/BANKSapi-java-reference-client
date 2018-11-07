@@ -114,6 +114,6 @@ public class MgmtService extends AbstractAuthorizedBaseService {
     }
 
     URL getAuthContext() {
-        return HttpHelper.buildUrl(super.getBanksApiBase(),  "auth/");
+        return HttpHelper.buildUrl(super.getBanksapiBaseUrl(),  "auth/");
     }
 }

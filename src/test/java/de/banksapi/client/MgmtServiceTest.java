@@ -25,19 +25,16 @@ public class MgmtServiceTest implements BanksapiTest {
     private static ClientRole clientRole;
     private static UUID addedUser;
     private static String addedUsername;
-    private static boolean init = false;
-    private static BANKSapi banksApi;
 
     @Before
     public void setUp() throws Exception {
-        if (!init) {
-            banksApi = new SimpleBANKSapi();
-            init = true;
-        }
 
         if (mgmtService == null) {
-            OAuth2Token token = new OAuth2Service().getClientToken(ADMIN_CLIENT_USERNAME, ADMIN_CLIENT_PASSWORD);
+            OAuth2Service oAuth2Service = new OAuth2Service();
+            injectTestConfig(oAuth2Service);
+            OAuth2Token token = oAuth2Service.getClientToken(ADMIN_CLIENT_USERNAME, ADMIN_CLIENT_PASSWORD);
             mgmtService = new MgmtService(token);
+            injectTestConfig(mgmtService);
         }
         if (tenant == null) {
             Response<TenantList> tenantResponse = mgmtService.getTenants();

@@ -52,12 +52,14 @@ public class CustomerServiceHATEOASTest implements BanksapiTest {
     @Before
     public void setUp() throws Exception {
         if (customerService == null) {
-            BANKSapi banksApi = new SimpleBANKSapi();
-            OAuth2Token token = new OAuth2Service().getUserToken(CLIENT_USERNAME, CLIENT_PASSWORD,
+            OAuth2Service oAuth2Service = new OAuth2Service();
+            OAuth2Token token = oAuth2Service.getUserToken(CLIENT_USERNAME, CLIENT_PASSWORD,
                     USERNAME, PASSWORD);
+            injectTestConfig(oAuth2Service);
             URL pem = CryptoServiceTest.class.getResource("/public.pem");
             CryptoService cryptoService = CryptoService.fromX509PEMs(pem.getPath());
             customerService = new CustomerServiceHATEOAS(token, cryptoService);
+            injectTestConfig(customerService);
         }
     }
 

@@ -17,9 +17,9 @@ import static de.banksapi.client.services.internal.StringUtil.isBlank;
  * This class provides basic HTTP communication functions via {@link HttpsURLConnection} and acts
  * as a facade to ease the integration of a different HTTP client such as OkHttp, Apache CXF, Apache
  * HttpComponents and so on.
- * <p>This client is stateful and you should use one {@link DefaultStatefulHttpClient} instance per request.</p>
+ * <p>This client is stateful and you should use one {@link SimpleHttpClient} instance per request.</p>
  */
-public class DefaultStatefulHttpClient implements IHTTPClientUnconfigured {
+public class SimpleHttpClient implements IHTTPClientUnconfigured {
 
     private URL url;
 
@@ -30,7 +30,7 @@ public class DefaultStatefulHttpClient implements IHTTPClientUnconfigured {
     private final static int connectTimeout = 30000; // 30 seconds in ms
     private final static int readTimeout = 300000; // five minutes in ms
 
-    public DefaultStatefulHttpClient(URL url) {
+    public SimpleHttpClient(URL url) {
         try {
             this.url = url;
             httpsURLConnection = (HttpsURLConnection) this.url.openConnection();

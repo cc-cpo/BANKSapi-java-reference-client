@@ -1,11 +1,9 @@
 package de.banksapi.client.services;
 
-import de.banksapi.client.crypto.CryptoService;
 import de.banksapi.client.model.incoming.oauth2.OAuth2Token;
 import de.banksapi.client.services.internal.HttpHelper;
 
 import java.net.URL;
-import java.util.Objects;
 
 class CustomerServiceBase extends AbstractAuthorizedBaseService {
     final static String PATH_FMT_BANKZUGAENGE = "bankzugaenge";
@@ -23,6 +21,6 @@ class CustomerServiceBase extends AbstractAuthorizedBaseService {
     }
 
     URL getCustomerContext() {
-        return HttpHelper.buildUrl(super.getBanksApiBase(),  "customer/v2/");
+        return HttpHelper.buildUrl(super.getBanksapiBaseUrl(),  "customer/v2/");
     }
 }

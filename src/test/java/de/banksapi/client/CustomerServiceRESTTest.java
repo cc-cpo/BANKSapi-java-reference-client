@@ -56,9 +56,11 @@ public class CustomerServiceRESTTest implements BanksapiTest {
     public void setUp() throws Exception {
         if (customerService == null) {
             OAuth2Service oAuth2Service = new OAuth2Service();
+            injectTestConfig(oAuth2Service);
             OAuth2Token token = oAuth2Service.getUserToken(CLIENT_USERNAME, CLIENT_PASSWORD,
                     USERNAME, PASSWORD);
             customerService = new CustomerServiceREST(token, cryptoService);
+            injectTestConfig(customerService);
         }
     }
 

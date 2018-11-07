@@ -3,7 +3,6 @@ package de.banksapi.client.services;
 import de.banksapi.client.model.incoming.oauth2.OAuth2Token;
 import de.banksapi.client.model.incoming.providers.Provider;
 import de.banksapi.client.model.incoming.providers.ProviderList;
-import de.banksapi.client.services.internal.DefaultStatefulHttpClient;
 import de.banksapi.client.services.internal.HttpHelper;
 
 import java.net.URL;
@@ -38,6 +37,6 @@ public class ProvidersService extends AbstractAuthorizedBaseService {
     }
 
     URL getProvidersContext() {
-        return HttpHelper.buildUrl(super.getBanksApiBase(), "providers/v2/");
+        return HttpHelper.buildUrl(super.getBanksapiBaseUrl(), "providers/v2/");
     }
 }

@@ -6,29 +6,32 @@ import de.banksapi.client.model.incoming.providers.ProviderList;
 import de.banksapi.client.services.OAuth2Service;
 import de.banksapi.client.services.ProvidersService;
 import de.banksapi.client.services.Response;
-import org.junit.BeforeClass;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.UUID;
 
 import static de.banksapi.client.TestAuthData.*;
 
-public class ProvidersServiceTest {
+public class ProvidersServiceTest implements BanksapiTest{
 
     private static ProvidersService providersService;
 
-    @BeforeClass
-    public static void setUp() throws Exception {
-        BANKSapi banksApi = new SimpleBANKSapi();
-        OAuth2Token token = new OAuth2Service().getUserToken(CLIENT_USERNAME, CLIENT_PASSWORD,
+    @Before
+    public void setUp() throws Exception {
+        OAuth2Service oAuth2Service = new OAuth2Service();
+        injectTestConfig(oAuth2Service);
+        OAuth2Token token = oAuth2Service.getUserToken(CLIENT_USERNAME, CLIENT_PASSWORD,
                 USERNAME, PASSWORD);
         providersService = new ProvidersService(token);
+        injectTestConfig(providersService);
     }
 
     @Test
     public void testGetProviders() {
         Response<ProviderList> response = providersService.getProviders();
-        assert response.getData().size() > 1 : "provider list not > 1";
+        Assert.assertTrue(response.getData().size() > 1);
     }
 
     @Test
@@ -40,9 +43,9 @@ public class ProvidersServiceTest {
         String demoProviderName = "Demo Provider";
         String demoBic = "DEMO1234";
 
-        assert demoProviderName.equals(provider.getName()) : "provider name != " + demoProviderName;
-        assert provider.isConsumerRelevant() : "provider is not consumer relevant";
-        assert demoBic.equals(provider.getBic()) : "provider BIC != " + demoBic;
+        Assert.assertEquals(demoProviderName, provider.getName());
+        Assert.assertTrue(provider.isConsumerRelevant());
+        Assert.assertEquals(demoBic, provider.getBic());
     }
 
 }

@@ -5,14 +5,14 @@ import java.net.URL;
 
 import static de.banksapi.client.services.internal.StringUtil.isBlank;
 
-public class SimpleBANKSapi implements BANKSapi {
+public class SimpleBanksapiConfig implements BanksapiConfig {
     private URL banksapiBaseUrl;
 
-    public SimpleBANKSapi(URL banksapiBaseUrl) {
+    public SimpleBanksapiConfig(URL banksapiBaseUrl) {
         this.banksapiBaseUrl = banksapiBaseUrl;
     }
 
-    public SimpleBANKSapi(){
+    public SimpleBanksapiConfig(){
         try {
             String url = System.getProperty("BANKSAPI_BASE_URL");
             url = isBlank(url) ? "https://banksapi.io" : url;

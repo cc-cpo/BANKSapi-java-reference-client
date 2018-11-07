@@ -72,6 +72,6 @@ public class OAuth2Service extends AbstractBaseService {
     }
 
     URL getAuthContext() {
-        return HttpHelper.buildUrl(getBanksApiBase(),  "auth/");
+        return HttpHelper.buildUrl(getBanksapiBaseUrl(),  "auth/");
     }
 }
