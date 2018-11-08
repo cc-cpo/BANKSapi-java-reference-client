@@ -58,7 +58,7 @@ public class ResponseImpl<T> implements Response<T> {
 
     @Override
     public String toString() {
-        return String.format("Response code <%d> with data <%s> (%s)",
-            httpCode, data, error != null ? String.format("error <%s>", error) : "no error string");
+        return String.format("Response code <%d> with data <%s> (%s) and correlation id <%s>",
+            httpCode, data, error != null ? String.format("error <%s>", error) : "no error string", correlationId);
     }
 }
