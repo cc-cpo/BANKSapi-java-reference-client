@@ -61,7 +61,12 @@ public class OAuth2Token {
         this.scope = scope;
     }
 
+    public void setAccessToken(UUID accessToken) {
+        this.accessToken = accessToken;
+    }
+
     public void setTokenType(String tokenType) {
         this.tokenType = tokenType;
+
     }
 }
