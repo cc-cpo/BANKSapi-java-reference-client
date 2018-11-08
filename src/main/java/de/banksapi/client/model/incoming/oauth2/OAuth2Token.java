@@ -14,6 +14,13 @@ public class OAuth2Token {
     private UUID accessToken;
     private String tokenType;
 
+    public OAuth2Token() {
+    }
+
+    public OAuth2Token(UUID accessToken) {
+        this.accessToken = accessToken;
+    }
+
     public String getTenant() {
         return tenant;
     }
@@ -36,5 +43,25 @@ public class OAuth2Token {
 
     public String getTokenType() {
         return tokenType;
+    }
+
+    public void setTenant(String tenant) {
+        this.tenant = tenant;
+    }
+
+    public void setClient(String client) {
+        this.client = client;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+
+    public void setTokenType(String tokenType) {
+        this.tokenType = tokenType;
     }
 }
