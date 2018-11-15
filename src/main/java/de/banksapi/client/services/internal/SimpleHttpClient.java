@@ -28,8 +28,8 @@ public class SimpleHttpClient implements IHTTPClientUnconfigured {
 
     private ObjectMapper objectMapper;
 
-    private final static int connectTimeout = 30000; // 30 seconds in ms
-    private final static int readTimeout = 300000; // five minutes in ms
+    private static final int connectTimeout = 30000; // 30 seconds in ms
+    private static final int readTimeout = 300000; // five minutes in ms
 
     public SimpleHttpClient(URL url) {
         try {
@@ -43,6 +43,11 @@ public class SimpleHttpClient implements IHTTPClientUnconfigured {
         } catch (IOException e) {
             throw new IllegalStateException("Unable to setup HTTP connection to '" + url + "'", e);
         }
+    }
+
+    @Override
+    public URL getRequestUrl() {
+        return url;
     }
 
     public void setObjectMapperPropertyNamingStrategy(PropertyNamingStrategy namingStrategy) {

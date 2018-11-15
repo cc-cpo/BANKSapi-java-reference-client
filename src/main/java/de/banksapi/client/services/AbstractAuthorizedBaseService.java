@@ -1,6 +1,7 @@
 package de.banksapi.client.services;
 
 import de.banksapi.client.model.incoming.oauth2.OAuth2Token;
+import de.banksapi.client.services.internal.AroundRequestHandler;
 
 import java.net.URL;
 import java.util.Objects;
@@ -21,13 +22,20 @@ public abstract class AbstractAuthorizedBaseService extends AbstractBaseService 
         client.setHeader("Authorization", "Bearer " + getOAuth2Token().getAccessToken());
         client.setObjectMapperPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
 
+        final AroundRequestHandler aroundRequestHandler = new AroundRequestHandler(client);
+
         if (getCorrelationIdStrategy() != null) {
             final UUID correlationId = getCorrelationIdStrategy().getCorrelationId();
             Objects.requireNonNull(correlationId);
             client.setHeader("X-Correlation-ID", correlationId.toString());
+            aroundRequestHandler.setCorrelationId(correlationId);
         }
 
-        return client;
+        if (getRequestFilter() != null) {
+            aroundRequestHandler.setFilter(getRequestFilter());
+        }
+
+        return aroundRequestHandler;
     }
 
     final OAuth2Token getOAuth2Token() {

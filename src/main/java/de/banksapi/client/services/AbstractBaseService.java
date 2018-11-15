@@ -13,6 +13,8 @@ public abstract class AbstractBaseService {
 
     private ICorrelationIdStrategy correlationIdStrategy;
 
+    private IRequestFilter requestFilter;
+
     public void setClientFactory(IHTTPClientFactory clientFactory) {
         Preconditions.checkState(this.clientFactory == null, "Already defined!");
         this.clientFactory = clientFactory;
@@ -45,5 +47,17 @@ public abstract class AbstractBaseService {
     public void setCorrelationIdStrategy(ICorrelationIdStrategy correlationIdStrategy) {
         Preconditions.checkState(this.correlationIdStrategy == null, "Already defined!");
         this.correlationIdStrategy = correlationIdStrategy;
+    }
+
+    /**
+     * @return optional filter
+     */
+    public IRequestFilter getRequestFilter() {
+        return requestFilter;
+    }
+
+    public void setRequestFilter(IRequestFilter requestFilter) {
+        Preconditions.checkState(this.requestFilter == null, "Already defined!");
+        this.requestFilter = requestFilter;
     }
 }
