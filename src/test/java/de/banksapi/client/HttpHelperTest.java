@@ -46,7 +46,7 @@ public class HttpHelperTest {
     @Test
     public void concatWithParamsSpecialChards() throws Exception {
         URL url = HttpHelper.buildUrl(new URL("https://proxy.example.com/mycontext"), "/customer/v2/bankzugaenge/1234-4321/%s/kontoumsaetze", "Sparverträge Nr. 6767 999-99+2");
-        Assert.assertEquals("https://proxy.example.com/mycontext/customer/v2/bankzugaenge/1234-4321/Sparvertr%C3%A4ge+Nr.+6767+999-99%2B2/kontoumsaetze", url.toString());
+        Assert.assertEquals("https://proxy.example.com/mycontext/customer/v2/bankzugaenge/1234-4321/Sparvertr%C3%A4ge%20Nr.%206767%20999-99%2B2/kontoumsaetze", url.toString());
     }
 
 }

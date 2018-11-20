@@ -1,19 +1,13 @@
 package de.banksapi.client.services.internal;
 
-import org.bouncycastle.crypto.engines.ISAACEngine;
-
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 public class HttpHelper {
-
-    private static String raw;
 
     private HttpHelper() {
     }
@@ -47,7 +41,7 @@ public class HttpHelper {
     private static String urlEncode(String raw) {
         Objects.requireNonNull(raw);
         try {
-            return URLEncoder.encode(raw, "UTF-8");
+            return URLEncoder.encode(raw, "UTF-8").replaceAll("\\+", "%20");
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException(e);
         }
