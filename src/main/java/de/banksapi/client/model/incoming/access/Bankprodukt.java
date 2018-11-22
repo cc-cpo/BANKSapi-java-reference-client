@@ -1,7 +1,6 @@
 package de.banksapi.client.model.incoming.access;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.banksapi.client.model.LocalDateTimeDeserializer;
 import de.banksapi.client.model.incoming.Relation;
@@ -15,6 +14,10 @@ import java.util.Collection;
  * card.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kategorie", defaultImpl = Bankprodukt.class, visible = true)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Bausparprodukt.class, name = "BAUSPARVERTRAG"),
+})
 public class Bankprodukt implements Relations {
 
     private String id;

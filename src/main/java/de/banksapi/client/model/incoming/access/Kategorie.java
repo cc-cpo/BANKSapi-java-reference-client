@@ -17,6 +17,7 @@ public enum Kategorie {
     VISA,
     DINERSCLUB,
     SONSTIGEKARTE,
+    @Deprecated
     KREDITKARTENKONTO,
     DEPOT;
 }
