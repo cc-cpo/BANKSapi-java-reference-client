@@ -119,7 +119,7 @@ public class CustomerServiceHATEOAS extends CustomerServiceBase {
         submitTanBody.put("tan", tan);
 
         return createAuthenticatedHttpClient(submitTanUrl)
-                .post(submitTanBody, UeberweisungErgebnis.class);
+                .put(submitTanBody, UeberweisungErgebnis.class);
     }
 
 }
