@@ -19,7 +19,10 @@ import static de.banksapi.client.services.internal.HttpHelper.buildUrl;
  * <p>This service uses the APIs in the HATEOAS style.</p>
  *
  * @see <a href="https://docs.banksapi.de/customer.html">Banks/Connect Customer API</a>
+ *
+ * @deprecated do not use HATEOS as it is not actively maintained in this fork
  */
+@Deprecated
 public class CustomerServiceHATEOAS extends CustomerServiceBase {
 
     private CryptoService cryptoService;

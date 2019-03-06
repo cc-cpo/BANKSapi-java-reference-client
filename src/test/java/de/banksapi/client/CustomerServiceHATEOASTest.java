@@ -26,6 +26,7 @@ import static junit.framework.TestCase.fail;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(Parameterized.class)
+@Deprecated
 public class CustomerServiceHATEOASTest implements BanksapiTest {
 
     private static CustomerServiceHATEOAS customerService;
