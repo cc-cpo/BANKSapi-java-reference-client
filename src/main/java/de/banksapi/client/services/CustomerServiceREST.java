@@ -149,9 +149,9 @@ public class CustomerServiceREST extends CustomerServiceBase {
                 .post(ueberweisung, UeberweisungErgebnis.class);
     }
 
-    public Response<UeberweisungErgebnis> submitTextTan(String providerId, String productId,
+    public Response<UeberweisungErgebnis> submitTextTan(UUID providerId, String productId,
             UUID transactionId, String tan) {
-        URL submitTanUrl = buildUrl(getCustomerContext(), PATH_FMT_SUBMIT_TAN, providerId, productId, transactionId.toString());
+        URL submitTanUrl = buildUrl(getCustomerContext(), PATH_FMT_SUBMIT_TAN, providerId.toString(), productId, transactionId.toString());
 
         Map<String, String> submitTanBody = new HashMap<>();
         submitTanBody.put("tan", tan);
