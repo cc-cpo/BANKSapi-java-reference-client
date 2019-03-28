@@ -1,9 +1,11 @@
 package de.banksapi.client.model.incoming.access;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.banksapi.client.model.LocalDateTimeDeserializer;
 import de.banksapi.client.model.incoming.Relation;
 import de.banksapi.client.model.incoming.Relations;
+
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.UUID;
@@ -11,8 +13,10 @@ import java.util.UUID;
 /**
  * A Kontoumsatz (account turnover) contains all information about account movements.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Kontoumsatz implements Relations {
 
+    private UUID id;
     private double betrag;
     private String verwendungszweck;
     private String buchungstext;
@@ -29,13 +33,14 @@ public class Kontoumsatz implements Relations {
     private String gvCode;
     private String primanotaNummer;
 
-    private Collection<Relation> relations;
-    
-    private UUID id;
-
-    // base64, e.g. 6vlNGyYWf7yE3kd+iXSqHRephwEnozZcxXBblDT080U=
     private String hash;
-    
+
+    private Collection<Relation> relations;
+
+    public UUID getId() {
+        return id;
+    }
+
     public double getBetrag() {
         return betrag;
     }
@@ -76,25 +81,12 @@ public class Kontoumsatz implements Relations {
         return primanotaNummer;
     }
 
-    public Collection<Relation> getRelations() {
-        return relations;
-    }
-    
-    public UUID getId() {
-        return id;
-    }
-    
-    public void setId(UUID id) {
-        this.id = id;
-    }
-    
-    
     public String getHash() {
         return hash;
     }
-    
-    public void setHash(String hash) {
-        this.hash = hash;
+
+    public Collection<Relation> getRelations() {
+        return relations;
     }
-    
+
 }
